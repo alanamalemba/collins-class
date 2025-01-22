@@ -1,0 +1,12 @@
+{
+  "name": "hello_intro",
+  "version": "1.0.0",
+  "description": "An intro to node",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node ."
+  },
+  "author": "Alan",
+  "license": "ISC"
+}
