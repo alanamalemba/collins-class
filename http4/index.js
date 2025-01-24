@@ -1,23 +1,7 @@
 import http from "http";
 import url from "url";
 
-const users = [
-  {
-    id: 1,
-    name: "John James",
-    age: 88,
-  },
-  {
-    id: 2,
-    name: "Peter Trump",
-    age: 33,
-  },
-  {
-    id: 3,
-    name: "John Alan",
-    age: 33,
-  },
-];
+const users = [];
 
 // creating a server
 const server = http.createServer((req, res) => {
@@ -45,10 +29,14 @@ const server = http.createServer((req, res) => {
         const filteredUsers = users.filter((user) =>
           user.name.toLowerCase().includes(name.toLowerCase())
         );
-        res.writeHead(200);
+        res.writeHead(200, {
+          "Content-Type": "application/json",
+        });
         res.end(JSON.stringify(filteredUsers));
       } else {
-        res.writeHead(200);
+        res.writeHead(200, {
+          "Content-Type": "application/json",
+        });
         res.end(JSON.stringify(users));
       }
     } else if (pathname.includes("/user/")) {
@@ -60,11 +48,27 @@ const server = http.createServer((req, res) => {
       res.writeHead(200);
       res.end(JSON.stringify(requestedUser));
     }
+  } else if (method === "POST") {
+    // CREATING A RESOURCE/ USER
+    if (pathname === "/user") {
+      let data = "";
+
+      // listen to data event
+      req.on("data", (chunk) => {
+        data += chunk.toString();
+      });
+
+      // listen for end of streaming data
+      req.on("end", () => {
+        const userObj = JSON.parse(data);
+        users.push(userObj);
+      });
+
+      res.end("User saved successfully!");
+    }
   }
 
   //
-
-  res.end();
 });
 
 // starting the server
